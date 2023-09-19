@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  terragrunt:
+  terragrunt_dev:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,36 +20,30 @@ jobs:
           mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
           terragrunt --version
 
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Set up AWS CLI - Dev
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
           aws-region: us-east-1
 
       - name: Run Terragrunt Plan - Dev
-        working-directory: Dev
+        working-directory: root/Dev
         run: |
           terragrunt init
           terragrunt plan
 
-      - name: Run Terragrunt Plan - Prod
-        working-directory: Prod
-        run: |
-          terragrunt init
-          terragrunt plan
-
-  manual_approval:
-    needs: terragrunt
+  manual_approval_dev:
+    needs: terragrunt_dev
     runs-on: ubuntu-latest
     environment:
-      name: DevAndProd
+      name: Dev
     steps:
-      - name: Request Manual Approval
-        run: echo "Please review the Terragrunt plan and approve if everything looks good."
+      - name: Request Manual Approval - Dev
+        run: echo "Please review the Terragrunt plan for Dev and approve if everything looks good."
 
-  apply:
-    needs: manual_approval
+  apply_dev:
+    needs: manual_approval_dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 
@@ -63,19 +57,65 @@ jobs:
           terragrunt --version
 
       - name: Run Terragrunt Apply - Developer Environment
-        working-directory: Dev
-        run: terragrunt apply --terragrunt-non-interactive
+        working-directory: root/Dev
+        run: terragrunt apply -auto-approve
         env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV}}
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
 
+  terragrunt_prod:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
+
+      - name: Install & Setup Terragrunt
+        run: |
+          wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.32.0/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Set up AWS CLI - Prod
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          aws-region: us-east-1
+
+      - name: Run Terragrunt Plan - Prod
+        working-directory: root/Prod
+        run: |
+          terragrunt init
+          terragrunt plan
+
+  manual_approval_prod:
+    needs: terragrunt_prod
+    runs-on: ubuntu-latest
+    environment:
+      name: Prod
+    steps:
+      - name: Request Manual Approval - Prod
+        run: echo "Please review the Terragrunt plan for Prod and approve if everything looks good."
+
+  apply_prod:
+    needs: manual_approval_prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
+
+      - name: Install & Setup Terragrunt
+        run: |
+          wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.32.0/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
       - name: Run Terragrunt Apply - Production Environment
-        working-directory: Dev
-        run: terragrunt apply --terragrunt-non-interactive
+        working-directory: root/Prod
+        run: terragrunt apply -auto-approve
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-
-
-
-
