@@ -63,14 +63,14 @@ jobs:
           terragrunt --version
 
       - name: Run Terragrunt Apply - Developer Environment
-        working-directory: Dev
+        working-directory: root/Dev
         run: terragrunt apply --terragrunt-non-interactive
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV}}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
 
       - name: Run Terragrunt Apply - Production Environment
-        working-directory: Prod
+        working-directory: root/Prod
         run: terragrunt apply --terragrunt-non-interactive
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
