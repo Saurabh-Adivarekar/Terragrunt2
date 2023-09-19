@@ -13,11 +13,6 @@ jobs:
       - name: Checkout 
         uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.5.5
-
       - name: Install & Setup Terragrunt
         run: |
           wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.32.0/terragrunt_linux_amd64
@@ -32,9 +27,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Run Terragrunt 
+      - name: Run Terragrunt Plan - Dev
+        working-directory: Dev
         run: |
-          cd root 
+          terragrunt init
+          terragrunt plan
+
+      - name: Run Terragrunt Plan - Prod
+        working-directory: Prod
+        run: |
           terragrunt init
           terragrunt plan
 
@@ -42,10 +43,9 @@ jobs:
     needs: terragrunt
     runs-on: ubuntu-latest
     environment:
-      name: DevAndTest
+      name: DevAndProd
     steps:
       - name: Request Manual Approval
-        id: approval
         run: echo "Please review the Terragrunt plan and approve if everything looks good."
 
   apply:
@@ -54,10 +54,6 @@ jobs:
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.5.5
 
       - name: Install & Setup Terragrunt
         run: |
@@ -73,8 +69,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Run Terragrunt Apply
-        run: |
-          cd root
-          terragrunt run-all apply --terragrunt-non-interactive
+      - name: Run Terragrunt Apply - Developer Environment
+        working-directory: Dev
+        run: terragrunt apply --terragrunt-non-interactive
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV}}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+
+
+      - name: Run Terragrunt Apply - Production Environment
+        working-directory: Dev
+        run: terragrunt apply --terragrunt-non-interactive
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+
+
+
 
