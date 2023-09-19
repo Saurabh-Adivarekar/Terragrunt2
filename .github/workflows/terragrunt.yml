@@ -64,14 +64,14 @@ jobs:
 
       - name: Run Terragrunt Apply - Developer Environment
         working-directory: root/Dev
-        run: terragrunt apply --terragrunt-non-interactive
+        run: terragrunt apply -auto-approve
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV}}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
 
       - name: Run Terragrunt Apply - Production Environment
         working-directory: root/Prod
-        run: terragrunt apply --terragrunt-non-interactive
+        run: terragrunt apply -auto-approve
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
