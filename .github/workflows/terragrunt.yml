@@ -39,18 +39,11 @@ jobs:
           terragrunt init
           terragrunt plan
 
-  manual_approval:
+  apply:
     needs: terragrunt
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
-    steps:
-      - name: Request Manual Approval
-        run: echo "Please review the Terragrunt plan for ${{ github.event.inputs.environment }} and approve if everything looks good."
-
-  apply:
-    needs: manual_approval
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
