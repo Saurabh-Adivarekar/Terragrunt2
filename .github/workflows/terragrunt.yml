@@ -1,4 +1,4 @@
-name: Terraform Workflow with Terragrunt
+name: Terraform Workflow with Terragrunt!
 
 on:
   push:
