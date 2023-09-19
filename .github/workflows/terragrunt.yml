@@ -61,7 +61,6 @@ jobs:
           chmod +x terragrunt_linux_amd64
           mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
           terragrunt --version
-            - name: Set up AWS CLI
             
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
