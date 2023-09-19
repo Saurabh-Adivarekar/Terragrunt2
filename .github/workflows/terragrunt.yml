@@ -1,4 +1,4 @@
-name: Github Actions workflow with Terragrunt!!
+name: Github Actions Workflow with Terragrunt!!
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
         type: environment
 
 jobs:
-  terragrunt:
+  terragrunt_init_plan:
     runs-on: ubuntu-latest
     environment:
         name: ${{ github.event.inputs.environment }}
@@ -40,7 +40,7 @@ jobs:
           terragrunt plan
 
   apply:
-    needs: terragrunt
+    needs: terragrunt_init_plan
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
