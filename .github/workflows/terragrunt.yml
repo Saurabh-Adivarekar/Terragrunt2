@@ -28,13 +28,13 @@ jobs:
           aws-region: us-east-1
 
       - name: Run Terragrunt Plan - Dev
-        working-directory: Dev
+        working-directory: root/Dev
         run: |
           terragrunt init
           terragrunt plan
 
       - name: Run Terragrunt Plan - Prod
-        working-directory: Prod
+        working-directory: root/Prod
         run: |
           terragrunt init
           terragrunt plan
