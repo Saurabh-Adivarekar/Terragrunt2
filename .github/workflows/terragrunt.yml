@@ -1,14 +1,15 @@
-name: Github Actions Workflow with Terragrunt!! test
+name: Terraform Modules Demo
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: ["main"]
+  workflow-dispatch:
     inputs:
       environment:
         description: 'Environment to deploy to...'
         required: true
         type: environment
+
 
 jobs:
   terragrunt_init_plan:
@@ -18,6 +19,11 @@ jobs:
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
+
+      - name: Setup Terraform
+            uses: hashicorp/setup-terraform@v2
+            with:
+                terraform_version: 1.5.5
 
       - name: Install & Setup Terragrunt
         run: |
@@ -33,11 +39,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Run Terragrunt Plan
-        working-directory: root/${{ github.event.inputs.environment }}
+      - name: Run Terrafrom 
         run: |
-          terragrunt init
-          terragrunt plan
+          terraform init
+          terraform plan
 
   apply:
     needs: terragrunt_init_plan
@@ -62,6 +67,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Run Terragrunt Apply
-        working-directory: root/${{ github.event.inputs.environment }}
-        run: terragrunt apply -auto-approve
+      - name: Run Terraform Apply
+        run: terraform apply -auto-approve
+
+
