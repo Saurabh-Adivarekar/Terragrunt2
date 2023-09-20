@@ -43,6 +43,10 @@ jobs:
         run: |
           terraform init
           terraform plan
+      
+      - name: Initailizing s3 module
+        working-directory: s3
+        run: terraform init
 
   apply:
     needs: terragrunt_init_plan
