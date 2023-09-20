@@ -41,7 +41,7 @@ jobs:
 
       - name: Run Terrafrom 
         run: |
-          terraform init
+          terraform run-all init
           terraform plan
 
   apply:
