@@ -1,4 +1,4 @@
-name: Github Actions Workflow with Terragrunt!!
+name: Github Actions Workflow with Terragrunt!! test
 
 on:
   push:
