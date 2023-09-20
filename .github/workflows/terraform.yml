@@ -45,7 +45,7 @@ jobs:
           terraform plan
       
       - name: Initailizing s3 module
-        working-directory: s3
+        working-directory: ./modules/s3
         run: terraform init
 
   apply:
