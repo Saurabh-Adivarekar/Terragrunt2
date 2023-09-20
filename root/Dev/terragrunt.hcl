@@ -6,7 +6,7 @@ module "s3-bucket" {
 */
 
 terraform {
-  source = "tfr:../../modules//s3"
+  source = "../../modules/s3"
 }
 
 include "root" {
