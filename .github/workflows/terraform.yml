@@ -68,6 +68,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Run Terraform Apply
+        working-directory: Terragrunt2
         run: terraform apply -auto-approve
 
 
