@@ -7,8 +7,7 @@
 }*/
 
 module "s3-bucket" {
-  source  = "modules/s3"
-  version = "3.15.1"
+  source  = "../../modules/s3"
 }
 
 include "root" {
