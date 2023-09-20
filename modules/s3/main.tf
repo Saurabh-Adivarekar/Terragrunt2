@@ -1,10 +1,6 @@
-terraform {
-  required_version = ">= 1.0"
-}
 
-resource "aws_s3_bucket" "example" {
+resource "aws_s3_bucket" "s3_bucket" {
   bucket = "my-tf-test-bucket123"
-
   tags = {
     Name        = "My bucket"
   }
