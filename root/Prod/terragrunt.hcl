@@ -1,5 +1,9 @@
-terraform {
+/*terraform {
   source = "tfr:///terraform-aws-modules/ec2-instance/aws?version=5.5.0"
+}*/
+
+module "s3-bucket" {
+  source = "./modules/s3"
 }
 
 include "root" {
