@@ -1,10 +1,3 @@
-
-/*
-module "s3-bucket" {
-  source  = "../../modules//s3"
-}
-*/
-
 terraform {
   source = "../../modules/s3"
 }
