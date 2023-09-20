@@ -3,7 +3,7 @@ name: Terraform Modules Demo
 on:
   push:
     branches: ["main"]
-  workflow-dispatch:
+  workflow_dispatch:
     inputs:
       environment:
         description: 'Environment to deploy to...'
