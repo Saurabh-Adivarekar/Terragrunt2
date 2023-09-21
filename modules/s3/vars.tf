@@ -1,10 +1,7 @@
- /*
-  bucket = "terrabucket999"
- tags = {
-    Name        = "My bucket"
-  }
-*/ 
-
 variable BUCKETNAME {
-    default = terrabucket999
+    default = "terrabucket999"
+}
+
+variable ACL {
+    default = "private"
 }
