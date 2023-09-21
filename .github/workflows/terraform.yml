@@ -33,8 +33,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Run Terragrunt Plan
-        working-directory: root/${{ github.event.inputs.environment }}
+      - name: Run Terragrunt for ec2
+        working-directory: root/${{ github.event.inputs.environment }}/ec2
+        run: |
+          terragrunt init
+          terragrunt plan
+
+      - name: Run Terragrunt for s3
+        working-directory: root/${{ github.event.inputs.environment }}/s3
         run: |
           terragrunt init
           terragrunt plan
