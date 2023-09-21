@@ -68,6 +68,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Run Terragrunt Apply
-        working-directory: root/${{ github.event.inputs.environment }}
+      - name: Run Terragrunt Apply for ec2
+        working-directory: root/${{ github.event.inputs.environment }}/ec2
+        run: terragrunt apply -auto-approve
+
+      - name: Run Terragrunt Apply for s3
+        working-directory: root/${{ github.event.inputs.environment }}/s3
         run: terragrunt apply -auto-approve
