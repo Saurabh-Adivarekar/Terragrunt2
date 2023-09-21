@@ -18,7 +18,7 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
 
   contents = <<EOF
-provider "hashicorp/aws" {
+provider "registry.terraform.io/hashicorp/aws" {
     region = "us-east-1"
 }
 EOF
