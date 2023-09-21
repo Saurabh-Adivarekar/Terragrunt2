@@ -1,10 +1,4 @@
 terraform {
-  required_version = ">= 0.15"
+  source  = "terraform-aws-modules/s3-bucket/aws"
 }
 
-resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "terrabucket999"
-  tags = {
-    Name        = "My bucket"
-  }
-}
